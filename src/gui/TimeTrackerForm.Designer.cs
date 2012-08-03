@@ -51,6 +51,7 @@
             this.linkLabelSetMainTask = new System.Windows.Forms.LinkLabel();
             this.labelMainTask = new System.Windows.Forms.Label();
             this.linkLabelClearMainTask = new System.Windows.Forms.LinkLabel();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // labelTime
@@ -268,6 +269,12 @@
             this.linkLabelClearMainTask.Text = "Clear Main Task";
             this.linkLabelClearMainTask.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelClearMainTask_LinkClicked);
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Visible = true;
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
             // TimeTrackerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -299,6 +306,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TeamLab Timer ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TimeTrackerForm_FormClosing);
+            this.Load += new System.EventHandler(this.TimeTrackerForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -328,5 +336,6 @@
         private System.Windows.Forms.LinkLabel linkLabelSetMainTask;
         private System.Windows.Forms.Label labelMainTask;
         private System.Windows.Forms.LinkLabel linkLabelClearMainTask;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }

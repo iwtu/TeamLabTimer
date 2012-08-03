@@ -34,9 +34,9 @@ namespace TeamLab.GUI
 
             if (comboBoxProjets.Items.Count > 0) {
                 int index = Properties.Settings.Default.SelectedProjectIndex;
-                comboBoxProjets.SelectedIndex = index < comboBoxProjets.Items.Count ? Properties.Settings.Default.SelectedProjectIndex : 0;                
+                comboBoxProjets.SelectedIndex = index < comboBoxProjets.Items.Count ? Properties.Settings.Default.SelectedProjectIndex : 0;
                 checkBoxTasks.Checked = Properties.Settings.Default.OnlyAcceptedTask;
-                labelTask.Text = checkBoxTasks.Checked ?  "All tasks" :  "My open tasks";                
+                labelTask.Text = checkBoxTasks.Checked ? "All tasks" : "My open tasks";
                 updateTasksComboBox();
             }
             buttonTime.Enabled = false;
@@ -46,8 +46,8 @@ namespace TeamLab.GUI
             labelPortal.Text = Portal;
             timer.State = TLTimer.STATE.Ready;
 
-           int MainTaskId = Properties.Settings.Default.MainTaskTaskId;
-           if (MainTaskId != -1) labelMainTask.Text = facade.GetTask(MainTaskId).title; else clearMainTask();           
+            int MainTaskId = Properties.Settings.Default.MainTaskTaskId;
+            if (MainTaskId != -1) labelMainTask.Text = facade.GetTask(MainTaskId).title; else clearMainTask();
         }
 
 
@@ -55,6 +55,8 @@ namespace TeamLab.GUI
         {
             labelTime.Text = timer.GetTime(checkBoxSeconds.Checked);
             labelHours.Text = "Hours: " + timer.GetHours();
+            this.Text = labelTime.Text + " - " + comboBoxTasks.SelectedItem;
+            notifyIcon1.Text = labelTime.Text + " - " + comboBoxTasks.SelectedItem;
         }
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace TeamLab.GUI
                 int projectId = ((Project)comboBoxProjets.SelectedItem).id;
 
                 try {
-                    Task[] tasks = checkBoxTasks.Checked ? facade.GetAllTasks(projectId) : facade.GetMyOpenTaskByProject(projectId);                    
+                    Task[] tasks = checkBoxTasks.Checked ? facade.GetAllTasks(projectId) : facade.GetMyOpenTaskByProject(projectId);
                     timerTasksUpdate.Stop();
                     labelPortal.ForeColor = System.Drawing.SystemColors.ControlText;
                     labelPortal.Text = Portal;
@@ -105,7 +107,7 @@ namespace TeamLab.GUI
                     labelPortal.Text = "Tasks for the project cannot be loaded.";
                     timerTasksUpdate.Start();
                 }
-                
+
             }
         }
 
@@ -248,7 +250,7 @@ namespace TeamLab.GUI
             //    return;
             //}
 
-            if (buttonTime.Text == "Continue") {
+            if (buttonTime.Text == "Continue" || buttonTime.Text == "Start") {
                 buttonTime.Text = "Pause";
                 //lockProjectAndTask();
                 timer.State = TLTimer.STATE.Running;
@@ -359,6 +361,8 @@ namespace TeamLab.GUI
         {
             facade.deleteTime(timer);
             viewTime();
+            stopTaskTimer();
+            buttonTime.Text = "Start";
         }
 
         private void linkLabelClearTime_MouseEnter(object sender, EventArgs e)
@@ -384,7 +388,7 @@ namespace TeamLab.GUI
                     return;
                 }
             }
-        }       
+        }
 
         private void buttonMainTask_Click(object sender, EventArgs e)
         {
@@ -392,7 +396,7 @@ namespace TeamLab.GUI
             int taskId = Properties.Settings.Default.MainTaskTaskId;
             selectProjectById(projectId);
             selectTaskById(taskId);
-            labelMainTask.Text = ((Task)comboBoxTasks.SelectedItem).title;            
+            labelMainTask.Text = ((Task)comboBoxTasks.SelectedItem).title;
             timer.Reset();
             startTaskTimer();
             buttonMainTask.Enabled = false;
@@ -403,13 +407,13 @@ namespace TeamLab.GUI
         {
             return Properties.Settings.Default.MainTaskTaskId != -1;
         }
-        
+
         private void setMainTask()
         {
             Properties.Settings.Default.MainTaskProjectId = ((Project)comboBoxProjets.SelectedItem).id;
             Properties.Settings.Default.MainTaskTaskId = ((Task)comboBoxTasks.SelectedItem).id;
             Properties.Settings.Default.Save();
-            labelMainTask.Text = ((Task)comboBoxTasks.SelectedItem).title;            
+            labelMainTask.Text = ((Task)comboBoxTasks.SelectedItem).title;
         }
 
         private void linkLabelSetMainTask_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -424,8 +428,8 @@ namespace TeamLab.GUI
             Properties.Settings.Default.MainTaskTaskId = -1;
             Properties.Settings.Default.Save();
             labelMainTask.Text = "There is no main task setted";
-            buttonMainTask.Enabled = false;            
-           
+            buttonMainTask.Enabled = false;
+
         }
 
         private void linkLabelClearMainTask_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -445,6 +449,16 @@ namespace TeamLab.GUI
             if (labelMainTask.Text != "There is no main task setted") {
                 toolTip.Show("This is your main task. You should work on it!", labelMainTask);
             }
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Visible = !this.Visible;
+        }
+
+        private void TimeTrackerForm_Load(object sender, EventArgs e)
+        {
+            notifyIcon1.Icon = this.Icon;
         }
 
 

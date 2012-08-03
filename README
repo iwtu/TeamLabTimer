@@ -1,0 +1,29 @@
+TeamLabTimer 0.09 Beta
+======================
+
+.NET Framework 4.0 compatible with MONO Project
+**Programming Language:** C#
+**Solution:** Visual Studio 2010 
+**Depedencies:** WinForms, JSON.NET (http://json.codeplex.com)
+**Supported Platforms:** Windows 7, Windows Vista SP1 or later, Windows XP SP3, Windows XP SP2 x64 Edition, Windows Server 2008, Windows Server 2003 SP2. Tested only on Windows 7.
+**Consultant:** Lukáš Doležal (http://lukas.dolezalu.cz/)
+**Author and Copyright:** Adrián Lachata (iwtu)
+
+About
+++++++
+
+This desktop application is timer tracker for really cool online service for project scheduling and managing, and for business collaboration. This service has been developed by Ascensio System SIA. It is accessible on the website http://teamlab.com. Obviously, it has its own web-based time tracker, but unfortunately the timer can be easily closed by accident or due to browser crash. Because of that not many people I know use it. 
+
+User Info
+++++++++++
+
+My application updates time every 30 seconds while the timer is running. Seeing your portal means your connection is OK. If the connection is down for any reason, it will show a red message with the latest uploaded time instead your portal; however,  the timer will still be working. You can still pause and then continue to measure time. When the connection is reestablished, you will see your portal again. Alas, if the connection is not reestablished until your work is finished, you will have to add time manually at http://teamlab.com later. Sorry. I can not handle this.
+
+Notes
++++++
+
+Normally I would have programmed  it in Qt (C++ or Python), but I had to program it in C# in order to achieve my university credit for C# and .NET programming.   C# is not very familiar with Qt and I am not very familiar with gtk, either. So due to lack of time I have chosen WinForms.
+
+I doubt that some will use this application, but in case you do, please, send me an email on iwtu@devradom.sk. As far I know myself, it would make me very surprised and happy :-)
+
+

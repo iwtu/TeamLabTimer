@@ -24,6 +24,6 @@ Notes
 
 Normally I would have programmed  it in Qt (C++ or Python), but I had to program it in C# in order to achieve my university credit for C# and .NET programming.   C# is not very familiar with Qt and I am not very familiar with gtk, either. So due to lack of time I have chosen WinForms.
 
-I doubt that some will use this application, but in case you do, please, send me an email on iwtu@devradom.sk. As far I know myself, it would make me very surprised and happy :-)
+I doubt that some will use this application, but in case you do, please, send me an email on iwtu@devrandom.sk. As far I know myself, it would make me very surprised and happy :-)
 
 

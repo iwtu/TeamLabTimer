@@ -25,6 +25,11 @@ namespace TeamLab.GUI
             checkBoxPass.Checked = Properties.Settings.Default.SavePassword;
         }
 
+        public LoginForm(String errorMessage) : this()
+        {
+            labelWrongCredentials.Text = errorMessage;
+        }
+
         private void btnSingIn_Click(object sender, EventArgs e)
         {
             string portal = textBoxPortal.Text;

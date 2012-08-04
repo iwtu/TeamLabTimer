@@ -128,7 +128,8 @@ namespace REST.TeamLab {
                     case WebExceptionStatus.NameResolutionFailure:
                         throw new ConnectionException();                        
                     case WebExceptionStatus.ProtocolError:
-                        //throw new CredentialsOrPortalException();                        
+                        if (ex.Message == "The remote server returned an error: (401) Unauthorized.")
+                            throw new CredentialsOrPortalException();
                         throw new DeleteTimerOnServerException();
                     
                     default:

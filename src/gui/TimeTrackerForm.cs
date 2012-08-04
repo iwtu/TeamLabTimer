@@ -102,6 +102,8 @@ namespace TeamLab.GUI
                     foreach (Task t in tasks) {
                         comboBoxTasks.Items.Add(t);
                     }
+                } catch (TeamLab.Exceptions.CredentialsOrPortalException) {
+                    Unauthorized();
                 } catch (TeamLabExpception) {
                     labelPortal.ForeColor = System.Drawing.Color.Red;
                     labelPortal.Text = "Tasks for the project cannot be loaded.";
@@ -290,6 +292,8 @@ namespace TeamLab.GUI
                 if (timer.State == TLTimer.STATE.Paused) {
                     timerUpdateTaskTimeOnServer.Stop();
                 }
+            } catch (TeamLab.Exceptions.CredentialsOrPortalException) {
+                Unauthorized(); 
             } catch (TeamLabExpception) {
                 if (labelPortal.Text == Portal) {
                     labelPortal.ForeColor = System.Drawing.Color.Red;
@@ -461,6 +465,14 @@ namespace TeamLab.GUI
             notifyIcon1.Icon = this.Icon;
         }
 
+        private void Unauthorized()
+        {
+            LoginForm loginForm = new LoginForm("Unathorized access. Did you change credentials on server?");            
+            DialogResult dialogResult = loginForm.ShowDialog();
+            while (dialogResult == DialogResult.Retry) {
+                dialogResult = loginForm.ShowDialog();
+            }
+        }
 
 
     }

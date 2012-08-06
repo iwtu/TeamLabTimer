@@ -51,17 +51,9 @@ namespace TeamLab.GUI
             try {
                 TeamLab.Wrapper.Facade.Authentificate(portal, name, password);
             } catch (TeamLabExpception ex) {
-                if (ex.Type == TeamLabExpception.TYPE.CredentialsOrPortal ||
-                    ex.Type == TeamLabExpception.TYPE.Connection) {
-                    labelWrongCredentials.Text = ex.Message;
-                    this.DialogResult = System.Windows.Forms.DialogResult.Retry;
-                } else if (ex.Type == TeamLabExpception.TYPE.DeleteTimerOnServer) {
-                    labelWrongCredentials.Text = "Authentificaton refused. Please, check your inputs.";
-                    this.DialogResult = System.Windows.Forms.DialogResult.Retry;
-                } else {
-                    throw ex;
-                }
-            }
+                labelWrongCredentials.Text = ex.Message;
+                this.DialogResult = System.Windows.Forms.DialogResult.Retry;
+            } 
 
         }        
 

@@ -80,6 +80,7 @@
     <Compile Include="src\gui\QuitForm.Designer.cs">
       <DependentUpon>QuitForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\Logger.cs" />
     <Compile Include="src\Wrapper.cs" />
     <Compile Include="src\Exceptions.cs" />
     <Compile Include="src\gui\LoginForm.cs">

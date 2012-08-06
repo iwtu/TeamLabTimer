@@ -10,90 +10,66 @@ using System;
 
 namespace TeamLab.Exceptions
 {
-    public abstract class TeamLabExpception : Exception 
+    public abstract class TeamLabExpception : Exception
     {
-        public enum TYPE : int
-        {
-            CredentialsOrPortal,
-            RequestTimeRanOut,
-            Connection,
-            DeleteTimerOnServer
-        }
-
-        public TYPE Type { get; protected set; }
-        
         public TeamLabExpception() : base() { }
         public TeamLabExpception(string msg) : base(msg) { }
         public TeamLabExpception(string msg, Exception ex) : base(msg, ex) { }
-           
+
     }
 
-    public class CredentialsOrPortalException : TeamLabExpception
-    {        
-        
-        public CredentialsOrPortalException()
-        {
-            Type = TYPE.CredentialsOrPortal;
-        }
 
-        public override string Message
-        {
-            get
-            {
-                return "Entered credentials or portal are inncorrect.";
-            }
-        }
-    }
-
-    // FIXME: This exception is never catched
-    // FIX: Catch TeamLabException instead
-    public class RequestTimeRanOutException : TeamLabExpception 
-    { 
-        public RequestTimeRanOutException()
-        {
-            Type = TYPE.RequestTimeRanOut;
-        }
-        
-        public override string Message
-        {
-            get { return "Timeout for server response ran out."; }
-        }
-    }
-
-    public class ConnectionException : TeamLabExpception
+    public class WrongCredentialsException : TeamLabExpception
     {
-        public ConnectionException()
-        {
-            Type = TYPE.Connection;
-        }
-        
         public override string Message
         {
             get
             {
-                return "Connection failed.";
+                return "Invalid login or password";
             }
         }
     }
 
-    /// <summary>
-    /// This exception is called whenever someone delete processing timer on the server via web interface.
-    /// </summary>
-    public class DeleteTimerOnServerException : TeamLabExpception
+    public class WrongPortalException : TeamLabExpception
     {
-        
-        public DeleteTimerOnServerException()
-        {
-            Type = TYPE.DeleteTimerOnServer;
-        }
-        
         public override string Message
         {
             get
             {
-                return "Timer being in the progress was deleted on the server.";
+                return "This portal probably do not exists.";
             }
         }
     }
-    
+
+    public class ConnectionFailedException : TeamLabExpception
+    {
+        public override string Message
+        {
+            get
+            {
+                return "Connection has failed.";
+            }
+        }
+    }
+
+    public class TaskNotFoundException : TeamLabExpception
+    {
+       
+    }
+
+    public class UnathorizedException : TeamLabExpception
+    {
+        public override string Message
+        {
+            get
+            {
+                return "Your password, login or portal has changed.";
+            }
+        }
+    }
+
+    public class ObjectReferenceException : TeamLabExpception
+    {
+        
+    }
 }

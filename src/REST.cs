@@ -76,13 +76,11 @@ namespace REST
                 if (bodyParams != null) {
                     SendBody(request, MakeRequestBody(bodyParams)); // CIIN: asynchronous response. 
                 }
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse(); //CIIN: may cause timeout (perhaps)
                 responseAsString = ConvertResponseToString(response);            
 
             return responseAsString;            
-        }
-
-        
+        }        
     }
 }
 
@@ -120,21 +118,33 @@ namespace REST.TeamLab {
             try {                
                 return GetResponse(url + "." + ext.ToString(), method, headers, bodyParams);
             } catch (WebException ex) {
-                switch (ex.Status) {
-                    case WebExceptionStatus.ConnectFailure:
-                        throw new ConnectionException();                        
-                    case WebExceptionStatus.Timeout:
-                        throw new RequestTimeRanOutException();                     
-                    case WebExceptionStatus.NameResolutionFailure:
-                        throw new ConnectionException();                        
-                    case WebExceptionStatus.ProtocolError:
-                        if (ex.Message == "The remote server returned an error: (401) Unauthorized.")
-                            throw new CredentialsOrPortalException();
-                        throw new DeleteTimerOnServerException();
-                    
+                
+                if (ex.Message == "The remote server returned an error: (401) Unauthorized.") {
+                    throw new UnathorizedException();
+                }
+                
+                string msgFromServer = null;
+                try {
+                    var resp = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
+                    dynamic obj = Newtonsoft.Json.JsonConvert.DeserializeObject(resp);
+                    msgFromServer = obj.error.message;
+                } catch (NullReferenceException) {
+                    throw new ConnectionFailedException();
+                }
+
+                switch (msgFromServer) {
+                    case "Invalid username or password.":
+                        throw new WrongCredentialsException();
+                    case "Could not resolve current tenant :-(.":
+                        throw new WrongPortalException();
+                    case "Not found": //Task was not found on the server
+                        throw new TaskNotFoundException();
+                    case "Object reference not set to an instance of an object.":
+                        throw new ObjectReferenceException();
                     default:
                         throw ex;
-                }
+
+                }               
 
             }
             
@@ -146,7 +156,6 @@ namespace REST.TeamLab {
             headers.Add("Authorization", authorizationToken);
             return headers;
         }
-
         
         public string GetAuthorizedJSONResponse(string url, METHOD method, Dictionary<string, string> bodyParams, string authorizationToken)
         {           

@@ -181,7 +181,7 @@ namespace TeamLab.Wrapper
         private EventsAPI eventsAPI = new EventsAPI();
         private TeamAPI teamAPI = new TeamAPI();
         private TagAPI tagAPI = new TagAPI();
-        private ProfileAPI profileAPI = new ProfileAPI();        
+        private ProfileAPI profileAPI = new ProfileAPI();
 
 
         public void UpdateTaskTime(TLTimer timer)
@@ -194,22 +194,14 @@ namespace TeamLab.Wrapper
                 body.Add("personId", timer.MyId);
                 body.Add("hours", timer.GetHours().ToString());
 
-                try {
-                    if (timer.TimeId == -1) {
-                        body.Add("projectId", Convert.ToString(timer.ProjectId));
-                        timer.TimeId = (timeAPI.AddTaskTime(timer.TaskId, body)).id;                                                
-                    } else {
-                        timeAPI.UpdateTaskTime(timer.TimeId, body);
-                    }
 
-                    /*
-                     * In case the task time was deleted on the web during tracker run. It simply ingores 
-                     * the deleted task time and create new one.
-                     */
-
-                } catch (DeleteTimerOnServerException) {
-                    timer.TimeId = StartTime(timer);
+                if (timer.TimeId == -1) {
+                    body.Add("projectId", Convert.ToString(timer.ProjectId));
+                    timer.TimeId = (timeAPI.AddTaskTime(timer.TaskId, body)).id;
+                } else {
+                    timeAPI.UpdateTaskTime(timer.TimeId, body);
                 }
+
             }
         }
 
@@ -217,7 +209,7 @@ namespace TeamLab.Wrapper
         {
             if (timer.HasTimeId()) {
                 timeAPI.DeleteTimeSpent(timer.TimeId);
-            }            
+            }
             timer.Reset();
         }
 
@@ -271,7 +263,7 @@ namespace TeamLab.Wrapper
             }
             return projects;
         }
-        
+
         private Task[] transformJtasksToTasks(JTask[] jtasks)
         {
             Task[] tasks = new Task[jtasks.Length]; //CIIN: Make function 
@@ -281,7 +273,7 @@ namespace TeamLab.Wrapper
             }
             return tasks;
         }
-            
+
         public string GetMyId()
         {
             return profileAPI.MyProfile().id;

@@ -47,7 +47,11 @@ namespace TeamLab.GUI
             timer.State = TLTimer.STATE.Ready;
 
             int MainTaskId = Properties.Settings.Default.MainTaskTaskId;
-            if (MainTaskId != -1) labelMainTask.Text = facade.GetTask(MainTaskId).title; else clearMainTask();
+            try {
+                if (MainTaskId != -1) labelMainTask.Text = facade.GetTask(MainTaskId).title; else clearMainTask();
+            } catch (TeamLabExpception) {
+                clearMainTask();
+            }
         }
 
 
@@ -102,12 +106,13 @@ namespace TeamLab.GUI
                     foreach (Task t in tasks) {
                         comboBoxTasks.Items.Add(t);
                     }
-                } catch (TeamLab.Exceptions.CredentialsOrPortalException) {
-                    Unauthorized();
-                } catch (TeamLabExpception) {
+                } catch (ObjectReferenceException) {
+                    MessageBox.Show("Timing task or its part has changed or deleted on the server. Please, check the task on the server and close this application.", "Machinations on server - TimeLab", MessageBoxButtons.OK);
+                } catch (UnathorizedException) {
+                    Unauthorized();               
+                } catch (ConnectionFailedException ex) {
                     labelPortal.ForeColor = System.Drawing.Color.Red;
-                    labelPortal.Text = "Tasks for the project cannot be loaded.";
-                    timerTasksUpdate.Start();
+                    labelPortal.Text = ex.Message;
                 }
 
             }
@@ -122,7 +127,7 @@ namespace TeamLab.GUI
         private void comboBoxTasks_SelectedIndexChanged(object sender, EventArgs e)
         {
             stopTaskTimer();
-            facade.UpdateTaskTime(timer); //upload the latest time
+            UpdateTaskTime(); //upload the latest time
             timer.Reset();
             timer.TaskId = ((Task)comboBoxTasks.SelectedItem).id;
             startTaskTimer();
@@ -150,7 +155,7 @@ namespace TeamLab.GUI
         private void comboBoxProjets_SelectedIndexChanged(object sender, EventArgs e)
         {
             stopTaskTimer();
-            facade.UpdateTaskTime(timer);
+            UpdateTaskTime();
             buttonTime.Enabled = false;
             timer.Reset();
             timer.ProjectId = ((Project)comboBoxProjets.SelectedItem).id;
@@ -236,22 +241,6 @@ namespace TeamLab.GUI
 
         private void buttonTime_Click(object sender, EventArgs e)
         {
-            //if (buttonTime.Text == "Start") {
-            //    buttonTime.Text = "Pause";
-            //    lockProjectAndTask();
-            //    timer.TaskId = ((Task)comboBoxTasks.SelectedItem).id;
-            //    timer.ProjectId = ((Project)comboBoxProjets.SelectedItem).id;
-            //    timer.State = TLTimer.STATE.Running;
-            //    try {
-            //        facade.UpdateTaskTime(timer);
-            //    } catch (TeamLabExpception) {
-            //        labelPortal.ForeColor = System.Drawing.Color.Red;
-            //        labelPortal.Text = "Last uploaded time is " + timer.LastUploadedHours + " hours.";
-            //    }
-            //    startTaskTimer();
-            //    return;
-            //}
-
             if (buttonTime.Text == "Continue" || buttonTime.Text == "Start") {
                 buttonTime.Text = "Pause";
                 //lockProjectAndTask();
@@ -262,17 +251,7 @@ namespace TeamLab.GUI
                 //unlockProjectAndTask();
                 timer.State = TLTimer.STATE.Paused;
                 stopTaskTimer();
-
-                try {
-                    facade.UpdateTaskTime(timer);
-                    labelPortal.Text = Portal;
-                    labelPortal.ForeColor = System.Drawing.SystemColors.ControlText;
-                } catch (TeamLabExpception) {
-                    labelPortal.ForeColor = System.Drawing.Color.Red;
-                    labelPortal.Text = "Last uploaded time is " + timer.LastUploadedHours + " hours.";
-                    //timerUpdateTaskTimeOnServer.Stop(); /////////////////////
-                    timerUpdateTaskTimeOnServer.Start();
-                }
+                UpdateTaskTime();
             }
         }
 
@@ -284,34 +263,15 @@ namespace TeamLab.GUI
         /// <param name="e"></param>
         private void timerUpdateTaskTimeOnServer_Tick(object sender, EventArgs e) //LOOK: maybe it can run nonstop???
         {
-            try {
-                facade.UpdateTaskTime(timer); // can cause an exception
-                labelPortal.Text = Portal;
-                labelPortal.ForeColor = System.Drawing.SystemColors.ControlText;
-                timer.LastUploadedHours = timer.GetHours();
-                if (timer.State == TLTimer.STATE.Paused) {
-                    timerUpdateTaskTimeOnServer.Stop();
-                }
-            } catch (TeamLab.Exceptions.CredentialsOrPortalException) {
-                Unauthorized(); 
-            } catch (TeamLabExpception) {
-                if (labelPortal.Text == Portal) {
-                    labelPortal.ForeColor = System.Drawing.Color.Red;
-                    labelPortal.Text = "Last uploaded time is " + timer.LastUploadedHours + " hours.";
-                }
-
-            }
+            UpdateTaskTime();
         }
 
         private void TimeTrackerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             timerTaskTimer.Stop();
             timerUpdateTaskTimeOnServer.Stop();
-            facade.UpdateTaskTime(timer);
-
 
             if (timer.HasStarted()) {
-                //FormQuit formQuit = new FormQuit();
                 DialogResult dialogResult = System.Windows.Forms.DialogResult.No;
                 if (!isConnection()) {
                     dialogResult = MessageBox.Show("Connection is down. Your the latest update time for this task is " + timer.LastUploadedHours,
@@ -467,13 +427,32 @@ namespace TeamLab.GUI
 
         private void Unauthorized()
         {
-            LoginForm loginForm = new LoginForm("Unathorized access. Did you change credentials on server?");            
+            LoginForm loginForm = new LoginForm("Unathorized access. Did you change credentials on server?");
             DialogResult dialogResult = loginForm.ShowDialog();
             while (dialogResult == DialogResult.Retry) {
                 dialogResult = loginForm.ShowDialog();
             }
         }
 
+        private void UpdateTaskTime()
+        {
+            try {
+                facade.UpdateTaskTime(timer);
+                labelPortal.Text = Portal;
+                labelPortal.ForeColor = System.Drawing.SystemColors.ControlText;
+                timer.LastUploadedHours = timer.GetHours();
+            } catch (ObjectReferenceException) {
+                MessageBox.Show("Timing task or its part has changed or deleted on the server. Please, check the task on the server and close this application.", "Machinations on server - TimeLab", MessageBoxButtons.OK);
+            } catch (TaskNotFoundException) {
+                MessageBox.Show("Timing task or its part has changed or deleted on the server. Please, check the task on the server and close this application.", "Machinations on server - TimeLab", MessageBoxButtons.OK);
+            } catch (UnathorizedException) {
+                Unauthorized();
+            } catch (ConnectionFailedException) {
+                labelPortal.ForeColor = System.Drawing.Color.Red;
+                labelPortal.Text = "Last uploaded time is " + timer.LastUploadedHours + " hours.";
+                timerUpdateTaskTimeOnServer.Start();
+            }
 
+        }
     }
 }

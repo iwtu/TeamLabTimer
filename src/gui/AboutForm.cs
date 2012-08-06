@@ -8,6 +8,11 @@ namespace TeamLab.GUI
         {
             InitializeComponent();
         }
+
+        private void labelCaption_Click(object sender, System.EventArgs e)
+        {
+
+        }
         
     }
 }

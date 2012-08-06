@@ -56,8 +56,9 @@
             this.labelCaption.Name = "labelCaption";
             this.labelCaption.Size = new System.Drawing.Size(452, 42);
             this.labelCaption.TabIndex = 2;
-            this.labelCaption.Text = "About TeamLab Timer 0.09 Beta";
+            this.labelCaption.Text = "About TeamLab Timer 0.1 Beta";
             this.labelCaption.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelCaption.Click += new System.EventHandler(this.labelCaption_Click);
             // 
             // buttonClose
             // 

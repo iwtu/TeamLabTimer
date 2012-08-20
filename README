@@ -12,7 +12,7 @@ TeamLabTimer 0.09 Beta
 About
 ++++++
 
-This desktop application is timer tracker for really cool online service for project scheduling and managing, and for business collaboration. This service has been developed by Ascensio System SIA. It is accessible on the website http://teamlab.com. Obviously, it has its own web-based time tracker, but unfortunately the timer can be easily closed by accident or due to browser crash. Because of that not many people I know use it. 
+This desktop application is timer tracker for really cool online service for project scheduling and managing, and for business collaboration. This service has been developed by Ascensio System SIA. It is accessible on the website http://teamlab.com. It is an anlternative to web-based time tracker providel by TeamLab itself. 
 
 User Info
 ++++++++++
@@ -22,7 +22,7 @@ My application updates time every 30 seconds while the timer is running. Seeing 
 Notes
 +++++
 
-Normally I would have programmed  it in Qt (C++ or Python), but I had to program it in C# in order to achieve my university credit for C# and .NET programming.   C# is not very familiar with Qt and I am not very familiar with gtk, either. So due to lack of time I have chosen WinForms.
+Normally I would have programmed  it in Qt (C++ or Python), but I had to program it in C# in order to achieve my university credit for C# and .NET programming. C# is not very familiar with Qt and I am not very familiar with gtk, either. So due to lack of time I have chosen WinForms.
 
 I doubt that some will use this application, but in case you do, please, send me an email on iwtu@devrandom.sk. As far I know myself, it would make me very surprised and happy :-)
 

@@ -13,6 +13,8 @@ using TeamLab.API;
 using TeamLab.Exceptions;
 using System.Globalization;
 
+using Debug = System.Diagnostics.Debug;
+
 namespace TeamLab.Wrapper
 {
 
@@ -67,7 +69,7 @@ namespace TeamLab.Wrapper
             Ready
         }
 
-        private int m_minutes;
+        //private int m_minutes;
         private int m_seconds;
 
         public int TimeId { get; set; }
@@ -77,28 +79,14 @@ namespace TeamLab.Wrapper
         public string Note { get; set; }
         public STATE State { get; set; }
         public string LastUploadedHours { get; set; }
-
-        private int Hours { get; set; }
-        private int Minutes
-        {
-            get { return m_minutes; }
-            set
-            {
-                if (value < 0 || value > 59)
-                    throw new ArgumentOutOfRangeException("Possible values are between 0 and 59 integers");
-                else
-                    m_minutes = value;
-            }
-        }
+       
         private int Seconds
         {
             get { return m_seconds; }
             set
             {
-                if (value < 0 || value > 59)
-                    throw new ArgumentOutOfRangeException("Possible values are between 0 and 59 integers");
-                else
-                    m_seconds = value;
+                Debug.Assert(value >= 0, "Possible value is only greater then 0");                
+                m_seconds = value;
             }
         }
 
@@ -110,40 +98,18 @@ namespace TeamLab.Wrapper
 
         public void AddOneSecond()
         {
-            if (m_seconds == 59) {
-                m_seconds = 0;
-                if (m_minutes == 59) {
-                    m_minutes = 0;
-                    Hours++;
-                } else {
-                    m_minutes++;
-                }
-            } else {
-                m_seconds++;
-            }
+            m_seconds++;
         }
 
         public string GetTime(bool withSeconds)
-        {
-            StringBuilder hours = new StringBuilder(Hours.ToString());
-            StringBuilder minutes = new StringBuilder(Minutes.ToString());
-            StringBuilder seconds = new StringBuilder(Seconds.ToString());
-
-            if (Minutes < 10) minutes.Insert(0, '0');
-            if (Seconds < 10) seconds.Insert(0, '0');
-
-            StringBuilder result = hours.Append(':').Append(minutes);
-            if (withSeconds) {
-                result = result.Append(':').Append(seconds);
-            }
-
-            return result.ToString();
+        {  
+            TimeSpan t = TimeSpan.FromSeconds(Seconds);
+            return  withSeconds ? string.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds) 
+                : string.Format("{0:D2}:{1:D2}", t.Hours, t.Minutes);       
         }
 
         public void Reset()
-        {
-            Hours = 0;
-            Minutes = 0;
+        {           
             Seconds = 0;
             TimeId = -1;
             State = STATE.Ready;
@@ -157,7 +123,7 @@ namespace TeamLab.Wrapper
 
         public bool HasStarted()
         {
-            return Hours != 0 || Minutes != 0 || Seconds != 0;
+            return Seconds > 0;
         }
 
         /// <summary>
@@ -166,7 +132,7 @@ namespace TeamLab.Wrapper
         /// <returns>Spent time in hours with two decimal digits </returns>
         public string GetHours()
         {
-            double hours = Hours + ((float)Minutes / 60) + ((float)Seconds / 3600);
+            double hours = (float)Seconds / 3600;
             return Math.Round(hours, 2).ToString("G", CultureInfo.InvariantCulture);
         }
 

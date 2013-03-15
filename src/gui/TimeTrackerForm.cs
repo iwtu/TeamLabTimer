@@ -108,7 +108,7 @@ namespace TeamLab.GUI
                     }
                 } catch (ObjectReferenceException) {
                     MessageBox.Show("Timing task or its part has changed or deleted on the server. Please, check the task on the server and close this application.", "Machinations on server - TimeLab", MessageBoxButtons.OK);
-                } catch (UnathorizedException) {
+                } catch (UnauthorizedException) {
                     Unauthorized();               
                 } catch (ConnectionFailedException ex) {
                     labelPortal.ForeColor = System.Drawing.Color.Red;
@@ -445,7 +445,7 @@ namespace TeamLab.GUI
                 MessageBox.Show("Timing task or its part has changed or deleted on the server. Please, check the task on the server and close this application.", "Machinations on server - TimeLab", MessageBoxButtons.OK);
             } catch (TaskNotFoundException) {
                 MessageBox.Show("Timing task or its part has changed or deleted on the server. Please, check the task on the server and close this application.", "Machinations on server - TimeLab", MessageBoxButtons.OK);
-            } catch (UnathorizedException) {
+            } catch (UnauthorizedException) {
                 Unauthorized();
             } catch (ConnectionFailedException) {
                 labelPortal.ForeColor = System.Drawing.Color.Red;

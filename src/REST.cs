@@ -17,7 +17,7 @@ using JObject = Newtonsoft.Json.Linq.JObject;
 
 namespace REST
 {
-    public enum METHOD : int
+    public enum METHOD
     {
         GET,
         POST,
@@ -89,7 +89,7 @@ namespace REST.TeamLab {
     public class Request : REST.SynchronousRequest
     {
 
-        private enum EXTENSION : int
+        private enum EXTENSION
         {
             json,
             xml
@@ -120,7 +120,7 @@ namespace REST.TeamLab {
             } catch (WebException ex) {
                 
                 if (ex.Message == "The remote server returned an error: (401) Unauthorized.") {
-                    throw new UnathorizedException();
+                    throw new UnauthorizedException();
                 }
                 
                 string msgFromServer = null;

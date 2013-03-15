@@ -35,7 +35,8 @@ namespace TeamLab.API
             set
             {
                 portal = value;
-                Host = PROTOCOL + "://" + portal + "." + SERVER +"/";
+                //Host = PROTOCOL + "://" + portal + "." + SERVER +"/";
+                Host = String.Format("{0}://{1}.{2]/", PROTOCOL, portal, SERVER);
             }
         }
 
@@ -62,7 +63,7 @@ namespace TeamLab.API
 
         protected bool checkResponse(string response)
         {
-            return true; // CIIN: make code if necessary 
+            return true; // CIIN
         }
     }
 
@@ -93,7 +94,8 @@ namespace TeamLab.API
     {
         public AuthToken GetToken(Dictionary<string, string> body)
         {
-            string resource = API_VERSION + "/authentication";
+            //string resource = API_VERSION + "/authentication";
+            string resource = String.Format("{0}/authentication", API_VERSION);
             AuthToken authToken = execute<AuthToken>(resource, REST.METHOD.POST, body);
             AuthAPI.Token = authToken.token;
             return authToken;
@@ -101,7 +103,7 @@ namespace TeamLab.API
 
     }
 
-    public enum Status : int {
+    public enum Status {
         open,
         closed, 
         noaccept,
@@ -119,7 +121,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTask[] MyTaskWithDetails()
         {
-            string resource = API_PROJECT + "/task/@self";
+            //string resource = API_PROJECT + "/task/@self";
+            string resource = String.Format("{0}/task/@self", API_PROJECT);
             return execute<JTask[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -130,7 +133,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTask GetTask(int taskid)
         {
-            string resource = API_PROJECT + "/task/" + taskid;
+            //string resource = API_PROJECT + "/task/" + taskid;
+            string resource = String.Format("{0}/task/{1}", API_PROJECT, taskid);
             return execute<JTask>(resource, REST.METHOD.GET, null);
         }
 
@@ -141,7 +145,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTask[] Tasks(int projectid)
         {
-            string resource = API_PROJECT + "/" + projectid + "/task";
+            //string resource = API_PROJECT + "/" + projectid + "/task";
+            string resource = String.Format("{0}/{1}/task", API_PROJECT, projectid);
             return execute<JTask[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -152,7 +157,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTask[] MyTaskByStatus(string status)
         {
-            string resource = API_PROJECT + "/task/@self/" + status;
+            //string resource = API_PROJECT + "/task/@self/" + status;
+            string resource = String.Format("{0}/task@self/{1}", API_PROJECT, status);
             return execute<JTask[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -164,7 +170,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTask[] MyTaskByProjectAndStatus(int projectid, Status status)
         {
-            string resource = API_PROJECT + "/" + projectid + "/task/@self/" + status;
+            //string resource = API_PROJECT + "/" + projectid + "/task/@self/" + status;
+            string resource = String.Format("{0}/{1}/task/@self/{3}", API_PROJECT, projectid, status);
             return execute<JTask[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -175,7 +182,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTask[] AllTask(int projectid)
         {
-            string resource = API_PROJECT + "/" + projectid + "/task/@all";
+            //string resource = API_PROJECT + "/" + projectid + "/task/@all";
+            string resource = String.Format("{0}/{1}/task/@all", API_PROJECT, projectid);
             return execute<JTask[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -187,7 +195,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTask[] TasksWithStatus(int projectid, Status status)
         {
-            string resource = API_PROJECT + "/" + projectid + "/task/" + status;
+            //string resource = API_PROJECT + "/" + projectid + "/task/" + status;
+            string resource = String.Format("{0}/{1}/task/{3}", API_PROJECT, projectid, status);
             return execute<JTask[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -198,7 +207,8 @@ namespace TeamLab.API
         /// <param name="body"></param>
         public void AddTAsk(int projectid, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/" + projectid + "/task";
+            //string resource = API_PROJECT + "/" + projectid + "/task";
+            string resource = String.Format("{0}/{1}/task", API_PROJECT, projectid);
             execute<JVoid>(resource, REST.METHOD.POST, body);
 
         }
@@ -211,7 +221,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTask UpdateTask(int taskid, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/task/" + taskid;
+            //string resource = API_PROJECT + "/task/" + taskid;
+            string resource = String.Format("{0}/task/{1}", API_PROJECT, taskid);
             return execute<JTask>(resource, REST.METHOD.PUT, body);
         }
 
@@ -223,7 +234,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTask UpdateTaskStatus(int taskid, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/task/" + taskid + "/status";
+            //string resource = API_PROJECT + "/task/" + taskid + "/status";
+            string resource = String.Format("{0}/task/{1}/status", API_PROJECT, taskid);
             return execute<JTask>(resource, REST.METHOD.PUT, body);
         }
 
@@ -239,7 +251,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTime[] GetTimeSpent(int taskid)
         {
-            string resource = API_PROJECT + "/task/" + taskid + "/time";
+            //string resource = API_PROJECT + "/task/" + taskid + "/time";
+            string resource = String.Format("{0}/task/{1}/time", API_PROJECT, taskid);
             return execute<JTime[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -251,7 +264,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTime AddTaskTime(int taskid, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/task/" + taskid + "/time";
+            //string resource = API_PROJECT + "/task/" + taskid + "/time";
+            string resource = String.Format("{0}/task/{1}/time", API_PROJECT, taskid);
             return execute<JTime>(resource, REST.METHOD.POST, body);
         }
         
@@ -263,7 +277,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTime UpdateTaskTime(int timeid, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/time/" + timeid;
+            //string resource = API_PROJECT + "/time/" + timeid;
+            string resource = String.Format("{0}/time/{1}", API_PROJECT, timeid);
             return execute<JTime>(resource, REST.METHOD.PUT, body);
         }
 
@@ -274,7 +289,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTime DeleteTimeSpent(int timeid)
         {
-            string resource = API_PROJECT + "/time/" + timeid;
+            //string resource = API_PROJECT + "/time/" + timeid;
+            string resource = String.Format("{0}/time/{1}", API_PROJECT, timeid);
             return execute<JTime>(resource, REST.METHOD.DELETE, null);
         }
 
@@ -300,7 +316,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProject ProjectByID(int id)
         {
-            string resource = API_PROJECT + "/" + id;
+            //string resource = API_PROJECT + "/" + id;
+            string resource = String.Format("{0}/{1}", API_PROJECT, id);
             return execute<JProject>(resource, REST.METHOD.GET, null);
         }
 
@@ -311,7 +328,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProject[] ParticipatedProjects()
         {
-            string resource = API_PROJECT + "/@self";
+            //string resource = API_PROJECT + "/@self";
+            string resource = String.Format("{0}/@self", API_PROJECT);
             return execute<JProject[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -321,7 +339,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProject[] FollowedProjects()
         {
-            string resource = API_PROJECT + "/@follow";
+            //string resource = API_PROJECT + "/@follow";
+            string resource = String.Format("{0}/@follow", API_PROJECT);
             return execute<JProject[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -332,7 +351,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProject[] ProjectByStatus(string status)
         {
-            string resource = API_PROJECT + "/" + status;
+            //string resource = API_PROJECT + "/" + status;
+            string resource = String.Format("{0}/{1}", API_PROJECT, status);
             return execute<JProject[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -343,7 +363,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTime[] ProjectTimeSpent(int id)
         {
-            string resource = API_PROJECT + "/" + id + "/time";
+            //string resource = API_PROJECT + "/" + id + "/time";
+            string resource = String.Format("{0}/{1}/time", API_PROJECT, id);
             return execute<JTime[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -354,7 +375,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JMilestone[] GetMilestonesByProjectID(int id)
         {
-            string resource = API_PROJECT + "/" + id + "/milestone";
+            //string resource = API_PROJECT + "/" + id + "/milestone";
+            string resource = String.Format("{0}/{1}/milestone", API_PROJECT, id);
             return execute<JMilestone[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -365,7 +387,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProject[] SearchAllProjects(string query)
         {
-            string resource = API_PROJECT + "/@search/" + query;
+            //string resource = API_PROJECT + "/@search/" + query;
+            string resource = String.Format("{0}/@search/{1}", API_PROJECT, query);
             return execute<JProject[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -377,7 +400,8 @@ namespace TeamLab.API
         /// <returns></returns>
         JFoundedProjets[] SearchProject(int id, string query)
         {
-            string resource = API_PROJECT + "/" + id + "/@search/" + query;
+            //string resource = API_PROJECT + "/" + id + "/@search/" + query;
+            string resource = String.Format("{0}/{1}/@search/{2}", API_PROJECT, id, query);
             return execute<JFoundedProjets[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -389,7 +413,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JMilestone[] GetMilestonesByProjectIDAndMilestoneStatus(int id, string status)
         {
-            string resource = API_PROJECT + "/" + id + "/milestone/" + status;
+            //string resource = API_PROJECT + "/" + id + "/milestone/" + status;
+            string resource = String.Format("{0}/{1}/milestone/{2}", API_PROJECT, id, status);
             return execute<JMilestone[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -400,7 +425,7 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProject CreateProject(Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "";
+            string resource = API_PROJECT;
             return execute<JProject>(resource, REST.METHOD.POST, body);
         }
 
@@ -411,7 +436,8 @@ namespace TeamLab.API
         /// <returns></returns>
         JProject RequestProject(Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/request";
+            //string resource = API_PROJECT + "/request";
+            string resource = String.Format("{0}/request", API_PROJECT);
             return execute<JProject>(resource, REST.METHOD.POST, body);
         }
 
@@ -423,7 +449,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JMilestone AddMilestone(int id, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/" + id + "/milestone";
+            //string resource = API_PROJECT + "/" + id + "/milestone";
+            string resource = String.Format("{0}/{1}/milestone", API_PROJECT, id);
             return execute<JMilestone>(resource, REST.METHOD.POST, body);
         }
 
@@ -435,7 +462,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProject UpdateProject(int id, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/" + id;
+            //string resource = API_PROJECT + "/" + id;
+            string resource = String.Format("{0}/{1}", API_PROJECT, id);
             return execute<JProject>(resource, REST.METHOD.PUT, body);
         }
 
@@ -447,7 +475,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProject UpdateProjectTags(int id, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/" + id + "/tag";
+            //string resource = API_PROJECT + "/" + id + "/tag";
+            string resource = String.Format("{0}/{1}/tag", API_PROJECT);
             return execute<JProject>(resource, REST.METHOD.PUT, body);
         }
 
@@ -459,7 +488,8 @@ namespace TeamLab.API
         /// <returns></returns>
         JProject RequestProjectUpdate(int id, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/" + id + "/request";
+            //string resource = API_PROJECT + "/" + id + "/request";
+            string resource = String.Format("{0}/{1}/request", API_PROJECT, id);
             return execute<JProject>(resource, REST.METHOD.PUT, body);
         }
 
@@ -470,7 +500,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProject DeleteProject(int id)
         {
-            string resource = API_PROJECT + "/" + id;
+            //string resource = API_PROJECT + "/" + id;
+            string resource = String.Format("{0}/{1}", API_PROJECT, id);
             return execute<JProject>(resource, REST.METHOD.DELETE, null);
         }
 
@@ -481,7 +512,8 @@ namespace TeamLab.API
         /// <returns></returns>
         JProject requestsProjectRemoval(int id)
         {
-            string resource = API_PROJECT + "/" + id + "/request";
+            //string resource = API_PROJECT + "/" + id + "/request";
+            string resource = String.Format("{0}/{1}/request", API_PROJECT, id);
             return execute<JProject>(resource, REST.METHOD.GET, null);
         }
 
@@ -491,7 +523,8 @@ namespace TeamLab.API
         /// <param name="taskid"></param>
         public void DeleteTask(int taskid)
         {
-            string resource = API_PROJECT + "/task/" + taskid;
+            //string resource = API_PROJECT + "/task/" + taskid;
+            string resource = String.Format("{0}/task/{1}", API_PROJECT, taskid);
             execute<JVoid>(resource, REST.METHOD.DELETE, null);
         }
 
@@ -507,7 +540,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JEvents GetEvent(int eventid)
         {
-            string resource = API_PROJECT + "/event/" + eventid;
+            //string resource = API_PROJECT + "/event/" + eventid;
+            string resource = String.Format("{0}/event/{1}", API_PROJECT, eventid);
             return execute<JEvents>(resource, REST.METHOD.GET, null);
 
         }
@@ -519,7 +553,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JEvents[] Events(int projectid)
         {
-            string resource = API_PROJECT + "/" + projectid + "/event";
+            //string resource = API_PROJECT + "/" + projectid + "/event";
+            string resource = String.Format("{0}/{1}/event", API_PROJECT, projectid);
             return execute<JEvents[]>(resource, REST.METHOD.GET, null);
 
 
@@ -535,7 +570,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JMilestone[] UpcomingMilestones()
         {
-            string resource = API_PROJECT + "/milestone";
+            //string resource = API_PROJECT + "/milestone";
+            string resource = String.Format("{0}/milestone", API_PROJECT);
             return execute<JMilestone[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -545,7 +581,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JMilestone[] OverdueMilestones()
         {
-            string resource = API_PROJECT + "/milestone/late";
+            //string resource = API_PROJECT + "/milestone/late";
+            string resource = String.Format("{0}/milestone/late", API_PROJECT);
             return execute<JMilestone[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -556,7 +593,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JMilestone GetMilestone(int id)
         {
-            string resource = API_PROJECT + "/milestone/" + id;
+            //string resource = API_PROJECT + "/milestone/" + id;
+            string resource = String.Format("{0}/milestone/{1}", API_PROJECT, id);
             return execute<JMilestone>(resource, REST.METHOD.GET, null);
         }
 
@@ -567,7 +605,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JTask[] GetMilestoneTasks(int id)
         {
-            string resource = API_PROJECT + "/milestone/" + id + "/task";
+            //string resource = API_PROJECT + "/milestone/" + id + "/task";
+            string resource = String.Format("{0}/milestone/{1}/task", API_PROJECT, id);
             return execute<JTask[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -579,7 +618,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JMilestone[] MilestonesByMonth(int year, int month)
         {
-            string resource = API_PROJECT + "/milestone/" + year + "/" + month;
+            //string resource = API_PROJECT + "/milestone/" + year + "/" + month;
+            string resource = String.Format("{0}/milestone/{1}/{2}", API_PROJECT, year, month);
             return execute<JMilestone[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -592,7 +632,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JMilestone[] MilestonesByMonth(int year, int month, int day)
         {
-            string resource = API_PROJECT + "/milestone/" + year + "/" + month + "/" + day;
+            //string resource = API_PROJECT + "/milestone/" + year + "/" + month + "/" + day;
+            string resource = String.Format("{0}/milestone/{1}/{2}/{3}", API_PROJECT, year, month,day);
             return execute<JMilestone[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -604,7 +645,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JMilestone UpdateMilestone(int id, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/milestone/" + id;
+            //string resource = API_PROJECT + "/milestone/" + id;
+            string resource = String.Format("{0}/milestone/{1}", API_PROJECT, id);
             return execute<JMilestone>(resource, REST.METHOD.PUT, body);
         }
 
@@ -615,7 +657,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JMilestone DeleteMilestone(int id)
         {
-            string resource = API_PROJECT + "/milestone/" + id;
+            //string resource = API_PROJECT + "/milestone/" + id;
+            string resource = String.Format("{0}/milestone/{1}", API_PROJECT, id);
             return execute<JMilestone>(resource, REST.METHOD.DELETE, null);
         }
 
@@ -630,7 +673,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JPerson[] ProjectTeam(int projectid)
         {
-            string resource = API_PROJECT + "/" + projectid + "/team";
+            //string resource = API_PROJECT + "/" + projectid + "/team";
+            string resource = String.Format("{0}/{1}/team", API_PROJECT, projectid);
             return execute<JPerson[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -642,7 +686,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JPerson[] AddToTeam(int projectid, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/" + projectid + "/team";
+            //string resource = API_PROJECT + "/" + projectid + "/team";
+            string resource = String.Format("{0}/{1}/team", API_PROJECT, projectid);
             return execute<JPerson[]>(resource, REST.METHOD.POST, body);
         }
 
@@ -654,7 +699,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JPerson[] SetTeamSecurity(int projectid, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/" + projectid + "/team/security";
+            //string resource = API_PROJECT + "/" + projectid + "/team/security";
+            string resource = String.Format("{0}/{1}/team/security", API_PROJECT, projectid);
             return execute<JPerson[]>(resource, REST.METHOD.POST, body);
         }
 
@@ -666,7 +712,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JPerson[] RemoveFromTeam(int projectid, Dictionary<string, string> body)
         {
-            string resource = API_PROJECT + "/" + projectid + "/team";
+            //string resource = API_PROJECT + "/" + projectid + "/team";
+            string resource = String.Format("{0}/{1}/team", API_PROJECT, projectid);
             return execute<JPerson[]>(resource, REST.METHOD.DELETE, body);
         }
     }
@@ -680,7 +727,8 @@ namespace TeamLab.API
         /// <returns></returns>
         JProject[] ProjectByTag(string tag)
         {
-            string resource = API_PROJECT + "/tag/" + tag;
+            //string resource = API_PROJECT + "/tag/" + tag;
+            string resource = String.Format("{0}/tag/{1}", API_PROJECT, tag);
             return execute<JProject[]>(resource, REST.METHOD.GET, null);
         }
     }    
@@ -694,7 +742,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProfile[] AllProfiles()
         {
-            string resource = API_VERSION + "/people";
+            //string resource = API_VERSION + "/people";
+            string resource = String.Format("{0}/people", API_VERSION);
             return execute<JProfile[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -704,7 +753,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProfile MyProfile()
         {
-            string resource = API_VERSION + "/people/@self";
+            //string resource = API_VERSION + "/people/@self";
+            string resource = String.Format("{0}/people/@self", API_VERSION);
             return execute<JProfile>(resource, REST.METHOD.GET, null);
         }
 
@@ -715,7 +765,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProfile SpecificProfile(string username)
         {
-            string resource = API_VERSION + "/people/" + username; 
+            //string resource = API_VERSION + "/people/" + username; 
+            string resource = String.Format("{0}/people/{1}", API_VERSION, username);
             return execute<JProfile>(resource, REST.METHOD.GET, null);
         }
 
@@ -726,7 +777,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProfile[] SearchUsers(string query)
         {
-            string resource = API_VERSION + "/people/@search/" + query;
+            //string resource = API_VERSION + "/people/@search/" + query;
+            string resource = String.Format("{0}/people/@search/{1}", API_VERSION, query);
             return execute<JProfile[]>(resource, REST.METHOD.GET, null);
         }
 
@@ -737,7 +789,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProfile AddNewUser(Dictionary<string,string> body)
         {
-            string resource = API_VERSION + "/people";
+            //string resource = API_VERSION + "/people";
+            string resource = String.Format("{0}/people", API_VERSION);
             return execute<JProfile>(resource, REST.METHOD.POST, body);
         }
 
@@ -748,8 +801,8 @@ namespace TeamLab.API
         /// <param name="body"></param>
         /// <returns></returns>
         public JProfile SetUserContacts(string userid, Dictionary<string, string> body)
-        {
-            string resource = API_VERSION + "/people/" + userid + "/contacts";
+        {            
+            string resource = String.Format("{0}/peoople/{1}/contacts", API_VERSION, userid);
             return execute<JProfile>(resource, REST.METHOD.POST, body);
         }
 
@@ -760,8 +813,8 @@ namespace TeamLab.API
         /// <param name="body"></param>
         /// <returns></returns>
         public JProfile UpdateUser(string userid, Dictionary<string, string> body)
-        {
-            string resource = API_VERSION + "/people/" + userid;
+        {            
+            string resource = String.Format("{0}/peoople/{1}", API_VERSION, userid);
             return execute<JProfile>(resource, REST.METHOD.PUT, body);
         }
 
@@ -786,7 +839,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProfile DeleteUser(string userid)
         {
-            string resource = API_VERSION + "/people/" + userid;
+            //string resource = API_VERSION + "/people/" + userid;
+            string resource = String.Format("{0}/people/{1}", API_VERSION, userid);
             return execute<JProfile>(resource, REST.METHOD.DELETE, null);
         }
 
@@ -797,7 +851,8 @@ namespace TeamLab.API
         /// <returns></returns>
         public JProfile DeleteUserPhoto(string userid)
         {
-            string resource = API_VERSION + "/people/" + userid + "/photo";
+            //string resource = API_VERSION + "/people/" + userid + "/photo";
+            string resource = String.Format("{0}/people/{1}/photo", API_VERSION, userid);
             return execute<JProfile>(resource, REST.METHOD.DELETE, null);
         }
 

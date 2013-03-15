@@ -57,7 +57,7 @@ namespace TeamLab.Exceptions
        
     }
 
-    public class UnathorizedException : TeamLabExpception
+    public class UnauthorizedException : TeamLabExpception
     {
         public override string Message
         {

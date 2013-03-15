@@ -10,147 +10,32 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using TeamLab.API;
+using TeamLab.API.Entities;
+using TeamLab.API.Auth;
+using TeamLab.API.Unauth;
 using TeamLab.Exceptions;
 using System.Globalization;
 
-using Debug = System.Diagnostics.Debug;
 
-namespace TeamLab.Wrapper
+namespace TeamLab.Control
 {
-
-    public class Project
+    public enum STATE
     {
-        public int id;
-        public string title;
-        public string description;
-        public int status;
-
-        public Project(int id, string title, string description, int status)
-        {
-            this.id = id;
-            this.title = title;
-            this.description = description;
-            this.status = status;
-        }
-
-        public override string ToString()
-        {
-            return title;
-        }
+        Ready,
+        Running,
+        Paused
     }
-
-    public class Task
-    {
-        public int id;
-        public string title;
-        public string description;
-        public int status;
-
-        public Task(int id, string title, string description, int status)
-        {
-            this.id = id;
-            this.title = title;
-            this.description = description;
-            this.status = status;
-        }
-
-        public override string ToString()
-        {
-            return title;
-        }
-    }
-
-    public class TLTimer
-    {
-        public enum STATE : int
-        {
-            Running,
-            Paused,
-            Ready
-        }
-
-        //private int m_minutes;
-        private int m_seconds;
-
-        public int TimeId { get; set; }
-        public int TaskId { get; set; }
-        public int ProjectId { get; set; }
-        public string MyId { get; set; }
-        public string Note { get; set; }
-        public STATE State { get; set; }
-        public string LastUploadedHours { get; set; }
-       
-        private int Seconds
-        {
-            get { return m_seconds; }
-            set
-            {
-                Debug.Assert(value >= 0, "Possible value is only greater then 0");                
-                m_seconds = value;
-            }
-        }
-
-        public TLTimer(string myId)
-        {
-            this.MyId = myId;
-            Reset();
-        }
-
-        public void AddOneSecond()
-        {
-            m_seconds++;
-        }
-
-        public string GetTime(bool withSeconds)
-        {  
-            TimeSpan t = TimeSpan.FromSeconds(Seconds);
-            return  withSeconds ? string.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds) 
-                : string.Format("{0:D2}:{1:D2}", t.Hours, t.Minutes);       
-        }
-
-        public void Reset()
-        {           
-            Seconds = 0;
-            TimeId = -1;
-            State = STATE.Ready;
-            LastUploadedHours = GetHours();
-        }
-
-        public bool HasTimeId()
-        {
-            return TimeId != -1;
-        }
-
-        public bool HasStarted()
-        {
-            return Seconds > 0;
-        }
-
-        /// <summary>
-        /// TeamLab.com measerues time as real with two decimal digits
-        /// </summary>
-        /// <returns>Spent time in hours with two decimal digits </returns>
-        public string GetHours()
-        {
-            double hours = (float)Seconds / 3600;
-            return Math.Round(hours, 2).ToString("G", CultureInfo.InvariantCulture);
-        }
-
-    }
-
+    
     public class Facade
     {
         private ProjectAPI projectAPI = new ProjectAPI();
         private TaskAPI taskAPI = new TaskAPI();
-        private TimeAPI timeAPI = new TimeAPI();
-        private MilestoneAPI milestoneAPI = new MilestoneAPI();
-        private EventsAPI eventsAPI = new EventsAPI();
-        private TeamAPI teamAPI = new TeamAPI();
-        private TagAPI tagAPI = new TagAPI();
+        private TimeAPI timeAPI = new TimeAPI();                  
         private ProfileAPI profileAPI = new ProfileAPI();
+        private UnauthAPI unauthAPI = new UnauthAPI();
 
 
-        public void UpdateTaskTime(TLTimer timer)
+        public void UpdateTaskTime(MainTimer timer)
         {
             // if it is something to update
             if (timer.LastUploadedHours != timer.GetHours()) {
@@ -171,7 +56,7 @@ namespace TeamLab.Wrapper
             }
         }
 
-        public void deleteTime(TLTimer timer)
+        public void deleteTime(MainTimer timer)
         {
             if (timer.HasTimeId()) {
                 timeAPI.DeleteTimeSpent(timer.TimeId);
@@ -179,7 +64,7 @@ namespace TeamLab.Wrapper
             timer.Reset();
         }
 
-        private int StartTime(TLTimer timer)
+        private int StartTime(MainTimer timer)
         {
             Dictionary<string, string> body = new Dictionary<string, string>();
             body.Add("note", timer.Note);
@@ -193,13 +78,13 @@ namespace TeamLab.Wrapper
 
 
 
-        public static void Authentificate(string portal, string userName, string password)
+        public void Authentificate(string portal, string userName, string password)
         {
             TeamLabAPI.Portal = portal;
             Dictionary<string, string> body = new Dictionary<string, string>();
             body.Add("userName", userName);
             body.Add("password", password);
-            AuthToken token = new AuthenticationAPI().GetToken(body);
+            unauthAPI.Authenticate(body);
         }
 
         public Project[] GetParticiapedProjects()

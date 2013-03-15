@@ -49,7 +49,8 @@ namespace TeamLab.GUI
             Properties.Settings.Default.Save();
 
             try {
-                TeamLab.Wrapper.Facade.Authentificate(portal, name, password);
+                Control.Facade facade = new Control.Facade();
+                facade.Authentificate(portal, name, password);
             } catch (TeamLabExpception ex) {
                 labelWrongCredentials.Text = ex.Message;
                 this.DialogResult = System.Windows.Forms.DialogResult.Retry;

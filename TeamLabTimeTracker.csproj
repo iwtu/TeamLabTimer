@@ -67,25 +67,55 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\gui\AboutForm.cs">
+    <Compile Include="src\API\Auth\AuthAPI.cs" />
+    <Compile Include="src\API\Entities\AuthToken.cs" />
+    <Compile Include="src\API\Auth\EventAPI.cs" />
+    <Compile Include="src\API\Auth\MilestoneAPI.cs" />
+    <Compile Include="src\API\Auth\ProfileAPI.cs" />
+    <Compile Include="src\API\Auth\ProjectAPI.cs" />
+    <Compile Include="src\API\Auth\TagAPI.cs" />
+    <Compile Include="src\API\Auth\TaskAPI.cs" />
+    <Compile Include="src\API\Auth\TeamAPI.cs" />
+    <Compile Include="src\API\Auth\TimeAPI.cs" />
+    <Compile Include="src\API\Entities\JAncestor.cs" />
+    <Compile Include="src\API\Entities\JEntity.cs" />
+    <Compile Include="src\API\Entities\JEvents.cs" />
+    <Compile Include="src\API\Entities\JFoundedProjects.cs" />
+    <Compile Include="src\API\Entities\JMilestone.cs" />
+    <Compile Include="src\API\Entities\JPerson.cs" />
+    <Compile Include="src\API\Entities\JProfile.cs" />
+    <Compile Include="src\API\Entities\JProject.cs" />
+    <Compile Include="src\API\Entities\JProjectOwnder.cs" />
+    <Compile Include="src\API\Entities\JTask.cs" />
+    <Compile Include="src\API\Entities\JTime.cs" />
+    <Compile Include="src\API\Entities\JVoid.cs" />
+    <Compile Include="src\API\Status.cs" />
+    <Compile Include="src\API\Unauth\UnauthAPI.cs" />
+    <Compile Include="src\Control\Project.cs" />
+    <Compile Include="src\Control\Task.cs" />
+    <Compile Include="src\Control\Timer.cs" />
+    <Compile Include="src\GUI\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\gui\AboutForm.Designer.cs">
+    <Compile Include="src\GUI\AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\API.cs" />
-    <Compile Include="src\gui\QuitForm.cs">
+    <Compile Include="src\API\API.cs" />
+    <Compile Include="src\GUI\QuitForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\gui\QuitForm.Designer.cs">
+    <Compile Include="src\GUI\QuitForm.Designer.cs">
       <DependentUpon>QuitForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\Wrapper.cs" />
-    <Compile Include="src\Exceptions.cs" />
-    <Compile Include="src\gui\LoginForm.cs">
+    <Compile Include="src\REST\Method.cs" />
+    <Compile Include="src\REST\SynchronousRequest1.cs" />
+    <Compile Include="src\REST\TeamLabRequest.cs" />
+    <Compile Include="src\Control\Facade.cs" />
+    <Compile Include="src\Exceptions\Exceptions.cs" />
+    <Compile Include="src\GUI\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\gui\LoginForm.Designer.cs">
+    <Compile Include="src\GUI\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\Program.cs" />
@@ -95,11 +125,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="src\REST.cs" />
-    <Compile Include="src\gui\TimeTrackerForm.cs">
+    <Compile Include="src\GUI\TimeTrackerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\gui\TimeTrackerForm.Designer.cs">
+    <Compile Include="src\GUI\TimeTrackerForm.Designer.cs">
       <DependentUpon>TimeTrackerForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -111,16 +140,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="src\gui\AboutForm.resx">
+    <EmbeddedResource Include="src\GUI\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\gui\QuitForm.resx">
+    <EmbeddedResource Include="src\GUI\QuitForm.resx">
       <DependentUpon>QuitForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\gui\LoginForm.resx">
+    <EmbeddedResource Include="src\GUI\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\gui\TimeTrackerForm.resx">
+    <EmbeddedResource Include="src\GUI\TimeTrackerForm.resx">
       <DependentUpon>TimeTrackerForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -146,6 +175,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

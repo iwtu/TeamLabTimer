@@ -8,7 +8,7 @@
 
 using System;
 using System.Windows.Forms;
-using TeamLab.Wrapper;
+using TeamLab.Control;
 using TeamLab.Exceptions;
 
 namespace TeamLab.GUI
@@ -17,14 +17,14 @@ namespace TeamLab.GUI
     {
 
         private Facade facade = new Facade();
-        private TLTimer timer;
+        private MainTimer timer;
         private Project[] projects;
         private string Portal;
 
         public TimeTrackerForm()
         {
             InitializeComponent();
-            timer = new TLTimer(facade.GetMyId());
+            timer = new MainTimer(facade.GetMyId());
 
             projects = facade.GetParticiapedProjects();
             foreach (Project p in projects) {
@@ -44,7 +44,7 @@ namespace TeamLab.GUI
             checkBoxSeconds.Checked = Properties.Settings.Default.ShowSeconds;
             Portal = Properties.Settings.Default.Portal + ".teamlab.com";
             labelPortal.Text = Portal;
-            timer.State = TLTimer.STATE.Ready;
+            timer.State = MainTimer.STATE.Ready;
 
             int MainTaskId = Properties.Settings.Default.MainTaskTaskId;
             try {
@@ -244,12 +244,12 @@ namespace TeamLab.GUI
             if (buttonTime.Text == "Continue" || buttonTime.Text == "Start") {
                 buttonTime.Text = "Pause";
                 //lockProjectAndTask();
-                timer.State = TLTimer.STATE.Running;
+                timer.State = MainTimer.STATE.Running;
                 startTaskTimer();
             } else {
                 buttonTime.Text = "Continue";
                 //unlockProjectAndTask();
-                timer.State = TLTimer.STATE.Paused;
+                timer.State = MainTimer.STATE.Paused;
                 stopTaskTimer();
                 UpdateTaskTime();
             }
@@ -318,7 +318,7 @@ namespace TeamLab.GUI
 
         private void timerTasksUpdate_Tick(object sender, EventArgs e)
         {
-            if (timer.State == TLTimer.STATE.Ready) updateTasksComboBox();
+            if (timer.State == MainTimer.STATE.Ready) updateTasksComboBox();
         }
 
         private void linkLabelClearTime_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

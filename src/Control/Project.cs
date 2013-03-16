@@ -12,10 +12,10 @@ namespace TeamLab.Control
 {
     public class Project
     {
-        public int id;
-        public string title;
-        public string description;
-        public int status;
+        public int id {get; set; }
+        public string title {get; set; }
+        public string description { get; set; }
+        public int status { get; set; }
 
         public Project(int id, string title, string description, int status)
         {

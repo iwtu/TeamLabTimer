@@ -180,7 +180,7 @@ namespace TeamLab.API.Auth
         /// <param name="id"></param>
         /// <param name="body"></param>
         /// <returns></returns>
-        JProject RequestProjectUpdate(int id, Dictionary<string, string> body)
+        public JProject RequestProjectUpdate(int id, Dictionary<string, string> body)
         {         
             string resource = String.Format("{0}/{1}/request", API_PROJECT, id);
             return execute<JProject>(resource, REST.METHOD.PUT, body);
@@ -202,7 +202,7 @@ namespace TeamLab.API.Auth
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        JProject requestsProjectRemoval(int id)
+        public JProject requestsProjectRemoval(int id)
         {         
             string resource = String.Format("{0}/{1}/request", API_PROJECT, id);
             return execute<JProject>(resource, REST.METHOD.GET, null);

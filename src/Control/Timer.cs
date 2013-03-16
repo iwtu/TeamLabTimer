@@ -15,7 +15,7 @@ namespace TeamLab.Control
 {
     public class MainTimer
     {
-        public enum STATE : int
+        public enum STATE 
         {
             Running,
             Paused,

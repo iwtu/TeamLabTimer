@@ -34,7 +34,7 @@ namespace TeamLab.Main
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Some odd error has occured. I, program don't know how to deal with it, so I will quit. If you see this message more than is healty, you can send me an email. Have a nice day :-)");
+                    MessageBox.Show("Some odd error has occured. Program don't know how to deal with it, so I will quit. If you see this message more than is healty, you can send me an email. Have a nice day :-)");
                 }
             }
             else

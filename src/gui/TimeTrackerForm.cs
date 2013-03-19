@@ -16,7 +16,7 @@ namespace TeamLab.GUI
     public partial class TimeTrackerForm : Form
     {
 
-        private Facade facade = new Facade();
+        private FacadeAPI facade = new FacadeAPI();
         private MainTimer timer;
         private Project[] projects;
         private string Portal;
@@ -323,7 +323,7 @@ namespace TeamLab.GUI
 
         private void linkLabelClearTime_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            facade.deleteTime(timer);
+            facade.DeleteTime(timer);
             viewTime();
             stopTaskTimer();
             buttonTime.Text = "Start";

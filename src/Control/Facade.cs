@@ -19,46 +19,43 @@ using System.Globalization;
 
 namespace TeamLab.Control
 {
-    public enum STATE
+    public class FacadeAPI
     {
-        Ready,
-        Running,
-        Paused
-    }
-    
-    public class Facade
-    {
-        private ProjectAPI projectAPI = new ProjectAPI();
-        private TaskAPI taskAPI = new TaskAPI();
-        private TimeAPI timeAPI = new TimeAPI();                  
-        private ProfileAPI profileAPI = new ProfileAPI();
-        private UnauthAPI unauthAPI = new UnauthAPI();
+        private readonly ProjectAPI projectAPI = new ProjectAPI();
+        private readonly TaskAPI taskAPI = new TaskAPI();
+        private readonly TimeAPI timeAPI = new TimeAPI();
+        private readonly ProfileAPI profileAPI = new ProfileAPI();
+        private readonly UnauthAPI unauthAPI = new UnauthAPI();
 
 
         public void UpdateTaskTime(MainTimer timer)
-        {
+        {            
+            if (timer.LastUploadedHours == timer.GetHours()) return;
             // if it is something to update
-            if (timer.LastUploadedHours != timer.GetHours()) {
-                Dictionary<string, string> body = new Dictionary<string, string>();
-                body.Add("note", timer.Note);
-                body.Add("date", DateTime.Now.ToString(CultureInfo.InvariantCulture));
-                body.Add("personId", timer.MyId);
-                body.Add("hours", timer.GetHours().ToString());
+            var body = new Dictionary<string, string>
+            {
+                {"note", timer.Note},
+                {"date", DateTime.Now.ToString(CultureInfo.InvariantCulture)},
+                {"personId", timer.MyId},
+                {"hours", timer.GetHours()}
+            };
 
 
-                if (timer.TimeId == -1) {
-                    body.Add("projectId", Convert.ToString(timer.ProjectId));
-                    timer.TimeId = (timeAPI.AddTaskTime(timer.TaskId, body)).id;
-                } else {
-                    timeAPI.UpdateTaskTime(timer.TimeId, body);
-                }
-
+            if (timer.TimeId == -1)
+            {
+                body.Add("projectId", Convert.ToString(timer.ProjectId));
+                timer.TimeId = (timeAPI.AddTaskTime(timer.TaskId, body)).id;
+            }
+            else
+            {
+                timeAPI.UpdateTaskTime(timer.TimeId, body);
             }
         }
 
-        public void deleteTime(MainTimer timer)
+        public void DeleteTime(MainTimer timer)
         {
-            if (timer.HasTimeId()) {
+            if (timer.HasTimeId())
+            {
                 timeAPI.DeleteTimeSpent(timer.TimeId);
             }
             timer.Reset();
@@ -66,24 +63,26 @@ namespace TeamLab.Control
 
         private int StartTime(MainTimer timer)
         {
-            Dictionary<string, string> body = new Dictionary<string, string>();
-            body.Add("note", timer.Note);
-            body.Add("date", DateTime.UtcNow.ToString());
-            body.Add("personId", timer.MyId);
-            body.Add("hours", timer.GetHours().ToString());
-            body.Add("projectId", Convert.ToString(timer.ProjectId));
+            var body = new Dictionary<string, string>()
+            {
+                {"note", timer.Note},
+                {"date", DateTime.UtcNow.ToString()},
+                {"personId", timer.MyId},
+                {"hours", timer.GetHours().ToString()},
+                {"projectId", Convert.ToString(timer.ProjectId)}
+            };
             JTime time = timeAPI.AddTaskTime(timer.TaskId, body);
             return time.id;
         }
 
-
-
         public void Authentificate(string portal, string userName, string password)
         {
             TeamLabAPI.Portal = portal;
-            Dictionary<string, string> body = new Dictionary<string, string>();
-            body.Add("userName", userName);
-            body.Add("password", password);
+            var body = new Dictionary<string, string>()
+            {
+                {"userName", userName},
+                {"password", password}
+            };
             unauthAPI.Authenticate(body);
         }
 
@@ -108,7 +107,8 @@ namespace TeamLab.Control
         private Project[] tranformJProjectsToProjects(JProject[] jprojects)
         {
             Project[] projects = new Project[jprojects.Length];
-            for (int i = 0; i < jprojects.Length; i++) {
+            for (int i = 0; i < jprojects.Length; i++)
+            {
                 JProject jp = jprojects[i];
                 projects[i] = new Project(jp.id, jp.title, jp.description, jp.status);
             }
@@ -118,7 +118,8 @@ namespace TeamLab.Control
         private Task[] transformJtasksToTasks(JTask[] jtasks)
         {
             Task[] tasks = new Task[jtasks.Length]; //CIIN: Make function 
-            for (int i = 0; i < jtasks.Length; i++) {
+            for (int i = 0; i < jtasks.Length; i++)
+            {
                 JTask jt = jtasks[i];
                 tasks[i] = new Task(jt.id, jt.title, jt.description, jt.status);
             }
@@ -139,14 +140,15 @@ namespace TeamLab.Control
         public void changeProjectTitle(int id, string newTitle)
         {
             JProject project = projectAPI.ProjectByID(id);
-            Dictionary<string, string> body = new Dictionary<string, string>();
-            body.Add("title", newTitle);
-            body.Add("description", project.description);
-            body.Add("responsibleId", project.responsible.id.ToString());
-            body.Add("tags", "");
-            body.Add("private", project.isPrivate.ToString());
-            body.Add("status", project.status.ToString());
-
+            var body = new Dictionary<string, string>()
+            {
+                {"title", newTitle},
+                {"description", project.description},
+                {"responsibleId", project.responsible.id.ToString()},
+                {"tags", ""},
+                {"private", project.isPrivate.ToString()},
+                {"status", project.status.ToString()}
+            };
             projectAPI.UpdateProject(id, body);
         }
 

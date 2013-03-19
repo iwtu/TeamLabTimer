@@ -49,7 +49,7 @@ namespace TeamLab.GUI
             Properties.Settings.Default.Save();
 
             try {
-                Control.Facade facade = new Control.Facade();
+                Control.FacadeAPI facade = new Control.FacadeAPI();
                 facade.Authentificate(portal, name, password);
             } catch (TeamLabExpception ex) {
                 labelWrongCredentials.Text = ex.Message;

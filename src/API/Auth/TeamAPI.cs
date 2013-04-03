@@ -1,10 +1,18 @@
-﻿using System;
+﻿/*
+ * Copyright © 2012 Adrián Lachata
+ * 
+ * CIIT! means Code It If Necessary. I use it when a piece of code have good reason,
+ * but it doesn't seem necassary to me.
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using TeamLab.API.Entities;
 
 namespace TeamLab.API.Auth
 {
-    public class TeamAPI : AuthAPI
+    public class TeamAPI : AuthAPI, ITeamAPI
     {
         /// <summary>
         /// Returns the list of all users participating in the project with the ID specified in the request

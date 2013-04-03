@@ -13,7 +13,7 @@ using TeamLab.API.Entities;
 
 namespace TeamLab.API.Auth
 {
-    public class TaskAPI : AuthAPI
+    public class TaskAPI : AuthAPI, ITaskAPI
     {
 
         /// <summary>

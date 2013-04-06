@@ -8,15 +8,15 @@
 
 using System;
 using System.Windows.Forms;
-using TeamLab.Control;
-using TeamLab.Exceptions;
+using TimeTracker.Exceptions;
+using TeamLab.Auth;
 
-namespace TeamLab.GUI
+namespace TimeTracker.GUI
 {
     public partial class TimeTrackerForm : Form
     {
 
-        private FacadeAPI facade = new FacadeAPI();
+        private TLFacadeAPI facade = new TLFacadeAPI(new ProjectAPI(), new TaskAPI(), new TimeAPI(), new ProfileAPI());
         private MainTimer timer;
         private Project[] projects;
         private string Portal;

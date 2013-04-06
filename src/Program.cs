@@ -9,10 +9,9 @@
 
 using System;
 using System.Windows.Forms;
-using TeamLab.GUI;
+using TimeTracker.GUI;
 
-
-namespace TeamLab.Main
+namespace TimeTracker.Main
 {
     class Program
     {

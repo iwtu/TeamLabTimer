@@ -1,4 +1,4 @@
-﻿namespace TeamLab.GUI
+﻿namespace TimeTracker.GUI
 {
     partial class AboutForm
     {

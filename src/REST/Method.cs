@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TeamLab.REST
+namespace REST
 {
     public enum METHOD
     {

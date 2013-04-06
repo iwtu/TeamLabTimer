@@ -8,7 +8,7 @@
 
 using System;
 
-namespace TeamLab.Exceptions
+namespace TimeTracker.Exceptions
 {
     public abstract class TeamLabExpception : Exception
     {

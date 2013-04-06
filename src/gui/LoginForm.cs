@@ -8,10 +8,10 @@
 
 using System;
 using System.Windows.Forms;
-using TeamLab.Exceptions;
+using TimeTracker.Exceptions;
 
 
-namespace TeamLab.GUI
+namespace TimeTracker.GUI
 {
     public partial class LoginForm : Form
     {
@@ -49,8 +49,8 @@ namespace TeamLab.GUI
             Properties.Settings.Default.Save();
 
             try {
-                Control.FacadeAPI facade = new Control.FacadeAPI();
-                facade.Authentificate(portal, name, password);
+                ILoginManager lm = new LoginManager();
+                lm.Authentificate(portal, name, password);
             } catch (TeamLabExpception ex) {
                 labelWrongCredentials.Text = ex.Message;
                 this.DialogResult = System.Windows.Forms.DialogResult.Retry;

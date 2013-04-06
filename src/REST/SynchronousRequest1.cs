@@ -2,11 +2,11 @@
 using System.IO;
 using System.Net;
 using System.Collections.Generic;
-using TeamLab.Exceptions;
+using TimeTracker.Exceptions;
 
 using JObject = Newtonsoft.Json.Linq.JObject;
 
-namespace TeamLab.REST
+namespace REST
 {
     public abstract class SynchronousRequest
     {

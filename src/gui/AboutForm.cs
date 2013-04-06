@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace TeamLab.GUI
+namespace TimeTracker.GUI
 {
     public partial class AboutForm : Form
     {
